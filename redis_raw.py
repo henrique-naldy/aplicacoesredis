@@ -35,3 +35,5 @@ print(elem2)
 ### Expiracao de dados
 redis_conn.set("chave_del", "esse valor sera deletado", 12)
 redis_conn.expire("meu_hash", 30)
+
+
