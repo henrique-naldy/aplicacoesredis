@@ -20,13 +20,25 @@ class ProductFinder:
         if not product:
             product = self.__find_in_sql(product_name)
             self.__insert_in_cache(product)
+
+    ## inserido pelo chat
+        if product:
+            return HttpResponse(
+                status_code=200,
+                body={"product": product}
+            )
+        else:
+            return HttpResponse(
+                status_code=404,
+                body={"message": f"Produto com nome '{product_name}' não encontrado."}
+            )
         
         return self.__insert_in_cache(product)
 
     def __find_in_cache(self, product_name: str) -> tuple:
         product_infos = self.__redis_repo.get_key(product_name)
         if product_infos:
-            product_infos_list = product_infos.sqlite(",") # price, quantity -> [price]
+            product_infos_list = product_infos.split(",") # price, quantity -> [price]
             return (0, product_name, product_infos_list[0], product_infos_list[1])
         
         return None
